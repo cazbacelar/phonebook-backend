@@ -1,0 +1,20 @@
+{
+  "name": "phonebook-backend",
+  "version": "1.0.0",
+  "description": "Backend part of the phonebook project for the Full Stack Open 2023 course",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cazbacelar/phonebook-backend.git"
+  },
+  "author": "Carolina Bacelar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cazbacelar/phonebook-backend/issues"
+  },
+  "homepage": "https://github.com/cazbacelar/phonebook-backend#readme"
+}
