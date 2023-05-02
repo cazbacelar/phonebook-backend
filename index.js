@@ -1,5 +1,6 @@
 const express = require("express")
 const app = express()
+app.use(express.json())
 
 let persons = [
   {
@@ -63,6 +64,43 @@ app.delete('/api/persons/:id', (request, response) => {
   persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
+})
+
+const generateId = () => {
+  const maxId = 1000000 // Set a maximum value for the ID
+  const minId = 1 // Set a minimum value for the ID
+  const randomId = Math.floor(Math.random() * maxId) + minId // Generate a random integer between minId and maxId
+  return randomId
+}
+
+const checkDuplicates = (newName) => {
+  const names = persons.map((person) => person.name)
+  return names.some((name) => name === newName)
+}
+
+// adds a new phonebook entry
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  // If the received data is missing a value for the name or the number property, the server will respond to the request with the status code 400 bad request
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "name and number must be added"
+    })
+  } else if (checkDuplicates(body.name)) {
+    return response.status(400).json({
+      error: "name must be unique"
+    })
+  }
+
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: body.number
+  }
+
+  persons = persons.concat(person)
+  response.json(person)
 })
 
 const PORT = 3001
