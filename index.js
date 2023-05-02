@@ -52,6 +52,7 @@ app.get("/api/persons/:id", (request, response) => {
   if (person) {
     response.json(person)
   } else {
+    response.statusMessage = "Phonebook entry with given id not found"
     response.status(404).send("No phonebook entry with the given id was found")
   }
 })
