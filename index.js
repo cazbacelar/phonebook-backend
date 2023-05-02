@@ -29,17 +29,31 @@ app.get("/", (request, response) => {
   response.send("<h1>Root</h1>")
 })
 
-// returns all persons
-app.get("/api/persons", (request, response) => {
-  response.json(persons)
-})
-
 // returns info
 app.get("/info", (request, response) => {
   const length = persons.length
   const currentTime = new Date()
 
-  response.send(`<p>Phonebook has info for ${length} people.</p><p>Request received at ${currentTime}</p>`)
+  response.send(
+    `<p>Phonebook has info for ${length} people.</p><p>Request received at ${currentTime}</p>`
+  )
+})
+
+// returns all persons
+app.get("/api/persons", (request, response) => {
+  response.json(persons)
+})
+
+// returns a single phonebook entry
+app.get("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find((person) => person.id === id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).send("No phonebook entry with the given id was found")
+  }
 })
 
 const PORT = 3001
