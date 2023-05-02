@@ -1,2 +1,3 @@
-# phonebook-backend
-Backend part of the phonebook project for the Full Stack Open 2023 course 
+# Phonebook backend
+
+Backend part of the phonebook app, written in Node.js and Express.
