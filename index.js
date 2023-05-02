@@ -1,20 +1,20 @@
 const express = require("express");
-const cors = require('cors')
+const cors = require("cors");
 // morgan is a Node.js and Express middleware to log HTTP requests and errors, and simplifies the process.
 const morgan = require("morgan");
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 // define a custom token for morgan
 morgan.token("req-body", (req, res) => {
   // the custom token "req-body" is defined using the morgan.token method
   if (req.method === "POST") {
-  // the custom token checks if the HTTP method is "POST"
-    return JSON.stringify(req.body)
+    // the custom token checks if the HTTP method is "POST"
+    return JSON.stringify(req.body);
     // if so, it returns the stringified request body
   }
-})
+});
 
 // middleware to parse JSON in requests bodies
 app.use(express.json());
@@ -24,9 +24,9 @@ app.use(express.json());
 // Use morgan middleware with the tiny format + the custom token
 app.use(
   morgan(
-    ':method :url :status :res[content-length] - :response-time ms :req-body'
+    ":method :url :status :res[content-length] - :response-time ms :req-body"
   )
-)
+);
 
 let persons = [
   {
@@ -129,7 +129,7 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
