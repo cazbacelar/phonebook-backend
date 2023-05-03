@@ -1,6 +1,6 @@
 # Phonebook backend
 
-This is the backend part of the phonebook app project of the Full Stack Open course. 
+This is the backend part of the phonebook app project of the Full Stack Open course. The fullstack application was deployed using fly.io and it is available here: https://ancient-bird-6685.fly.dev/
 
 This is a Node.js application that creates a simple RESTful API for a phonebook. It uses Express.js, a popular Node.js web application framework, to handle HTTP requests and responses.
 
