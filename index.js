@@ -1,16 +1,12 @@
-// important that dotenv gets imported before the person model is imported
-require("dotenv").config();
 const express = require("express");
 const app = express();
-const Person = require("./models/person");
-
 const cors = require("cors");
-
 // morgan is a Node.js and Express middleware to log HTTP requests and errors, and simplifies the process.
 const morgan = require("morgan");
+// important that dotenv gets imported before the person model is imported
+require("dotenv").config();
 
-app.use(cors());
-app.use(express.static("build"));
+const Person = require("./models/person");
 
 // define a custom token for morgan
 morgan.token("req-body", (req, res) => {
@@ -22,17 +18,31 @@ morgan.token("req-body", (req, res) => {
   }
 });
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(cors());
 // middleware to parse JSON in requests bodies
 app.use(express.json());
-
 // app.use(morgan('tiny'));
-
 // Use morgan middleware with the tiny format + the custom token
 app.use(
   morgan(
     ":method :url :status :res[content-length] - :response-time ms :req-body"
   )
 );
+app.use(express.static("build"));
 
 let persons = [
   {
@@ -95,18 +105,19 @@ app.get("/api/persons/:id", (request, response) => {
 
 // deletes a single phonebook entry
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  persons = persons.filter((person) => person.id !== id);
-
-  response.status(204).end();
+  Person.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
-const generateId = () => {
-  const maxId = 1000000; // Set a maximum value for the ID
-  const minId = 1; // Set a minimum value for the ID
-  const randomId = Math.floor(Math.random() * maxId) + minId; // Generate a random integer between minId and maxId
-  return randomId;
-};
+// const generateId = () => {
+//   const maxId = 1000000; // Set a maximum value for the ID
+//   const minId = 1; // Set a minimum value for the ID
+//   const randomId = Math.floor(Math.random() * maxId) + minId; // Generate a random integer between minId and maxId
+//   return randomId;
+// };
 
 const checkDuplicates = (newName) => {
   const names = persons.map((person) => person.name);
@@ -152,6 +163,9 @@ app.post("/api/persons", (request, response) => {
   // persons = persons.concat(person);
   // response.json(person);
 });
+
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
