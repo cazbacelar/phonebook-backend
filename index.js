@@ -74,12 +74,13 @@ app.get("/", (request, response) => {
 
 // returns info
 app.get("/info", (request, response) => {
-  const length = persons.length;
-  const currentTime = new Date();
-
-  response.send(
-    `<p>Phonebook has info for ${length} people.</p><p>Request received at ${currentTime}</p>`
-  );
+  Person.find({}).then((persons) => {
+    response.send(
+      `<p>Phonebook has info for ${
+        persons.length
+      } people.</p><p>Request received at ${new Date()}</p>`
+    );
+  });
 });
 
 // fetching all phonebook entries from the database
@@ -92,15 +93,29 @@ app.get("/api/persons", (request, response) => {
 
 // returns a single phonebook entry
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const person = persons.find((person) => person.id === id);
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.statusMessage =
+          "No phonebook entry with the given id was found";
+        response
+          .status(404)
+          .send("No phonebook entry with the given id was found");
+      }
+    })
+    .catch((error) => next(error));
 
-  if (person) {
-    response.json(person);
-  } else {
-    response.statusMessage = "Phonebook entry with given id not found";
-    response.status(404).send("No phonebook entry with the given id was found");
-  }
+  // const id = Number(request.params.id);
+  // const person = persons.find((person) => person.id === id);
+
+  // if (person) {
+  //   response.json(person);
+  // } else {
+  //   response.statusMessage = "Phonebook entry with given id not found";
+  //   response.status(404).send("No phonebook entry with the given id was found");
+  // }
 });
 
 // deletes a single phonebook entry
@@ -119,10 +134,25 @@ app.delete("/api/persons/:id", (request, response) => {
 //   return randomId;
 // };
 
-const checkDuplicates = (newName) => {
-  const names = persons.map((person) => person.name);
-  return names.some((name) => name === newName);
-};
+app.put("/api/persons/:id", (request, response, next) => {
+  const body = request.body;
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  };
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then((updatedPerson) => {
+      response.json(updatedPerson);
+    })
+    .catch((error) => next(error));
+});
+
+// const checkDuplicates = (newName) => {
+//   const names = persons.map((person) => person.name);
+//   return names.some((name) => name === newName);
+// };
 
 // create and save a new phonebook entry to the database
 app.post("/api/persons", (request, response) => {
