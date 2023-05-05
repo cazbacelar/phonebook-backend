@@ -113,7 +113,7 @@ const checkDuplicates = (newName) => {
   return names.some((name) => name === newName);
 };
 
-// adds a new phonebook entry
+// create and save a new phonebook entry to the database
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 

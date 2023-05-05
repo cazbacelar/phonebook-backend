@@ -4,12 +4,12 @@ mongoose.set("strictQuery", false);
 
 const url = process.env.MONGODB_URI;
 
-console.log("connecting to", url);
+console.log("Connecting to the database url...");
 
 mongoose
   .connect(url)
   .then((result) => {
-    console.log("connected to MongoDB. No errors.");
+    console.log("Connected to MongoDB");
   })
   .catch((error) => {
     console.log("error connecting to MongoDB:", error.message);
