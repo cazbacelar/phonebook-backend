@@ -72,7 +72,7 @@ app.get("/info", (request, response) => {
   );
 });
 
-// returns all entries
+// fetching all phonebook entries from the database
 app.get("/api/persons", (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
