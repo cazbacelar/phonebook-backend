@@ -1,13 +1,16 @@
-const Person = require('./models/person')
-
+// important that dotenv gets imported before the person model is imported
+require("dotenv").config();
 const express = require("express");
+const app = express();
+const Person = require("./models/person");
+
 const cors = require("cors");
+
 // morgan is a Node.js and Express middleware to log HTTP requests and errors, and simplifies the process.
 const morgan = require("morgan");
-const app = express();
 
 app.use(cors());
-app.use(express.static('build'))
+app.use(express.static("build"));
 
 // define a custom token for morgan
 morgan.token("req-body", (req, res) => {
@@ -69,9 +72,12 @@ app.get("/info", (request, response) => {
   );
 });
 
-// returns all persons
+// returns all entries
 app.get("/api/persons", (request, response) => {
-  response.json(persons);
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
+  // response.json(persons);
 });
 
 // returns a single phonebook entry
@@ -87,7 +93,7 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
-// deletes a single hponebook entry
+// deletes a single phonebook entry
 app.delete("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   persons = persons.filter((person) => person.id !== id);
@@ -132,7 +138,7 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
