@@ -74,9 +74,9 @@ app.get("/info", (request, response) => {
 
 // fetching all phonebook entries from the database
 app.get("/api/persons", (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons)
-  })
+  Person.find({}).then((persons) => {
+    response.json(persons);
+  });
   // response.json(persons);
 });
 
@@ -117,25 +117,40 @@ const checkDuplicates = (newName) => {
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
-  // If the received data is missing a value for the name or the number property, the server will respond to the request with the status code 400 bad request
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: "name and number must be added",
     });
-  } else if (checkDuplicates(body.name)) {
-    return response.status(400).json({
-      error: "name must be unique",
-    });
   }
 
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  };
+  });
 
-  persons = persons.concat(person);
-  response.json(person);
+  person.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
+
+  // If the received data is missing a value for the name or the number property, the server will respond to the request with the status code 400 bad request
+  // if (!body.name || !body.number) {
+  //   return response.status(400).json({
+  //     error: "name and number must be added",
+  //   });
+  // } else if (checkDuplicates(body.name)) {
+  //   return response.status(400).json({
+  //     error: "name must be unique",
+  //   });
+  // }
+
+  // const person = {
+  //   id: generateId(),
+  //   name: body.name,
+  //   number: body.number,
+  // };
+
+  // persons = persons.concat(person);
+  // response.json(person);
 });
 
 const PORT = process.env.PORT;
