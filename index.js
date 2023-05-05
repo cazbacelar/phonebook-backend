@@ -1,3 +1,5 @@
+const Person = require('./models/person')
+
 const express = require("express");
 const cors = require("cors");
 // morgan is a Node.js and Express middleware to log HTTP requests and errors, and simplifies the process.
@@ -5,7 +7,7 @@ const morgan = require("morgan");
 const app = express();
 
 app.use(cors());
-app.use(express.static('build')) 
+app.use(express.static('build'))
 
 // define a custom token for morgan
 morgan.token("req-body", (req, res) => {
