@@ -2,16 +2,9 @@
 
 This is the backend part of the phonebook app project of the Full Stack Open course. The fullstack application was deployed using fly.io and it is available here: https://ancient-bird-6685.fly.dev/
 
-This is a Node.js application that creates a simple RESTful API for a phonebook. It uses Express.js, a popular Node.js web application framework, to handle HTTP requests and responses.
+## Table of contents
+- [Front-end - React application](https://github.com/cazbacelar/fullstackopen/tree/main/part2/phonebook)
 
-The application provides several HTTP endpoints to manipulate the list of phonebook entries:
+This is a Node.js server that uses Express.js framework to serve a simple API for a phonebook application. The API include endpoints to create, read, update, and delete phonebook entries.
 
-- GET /api/persons returns all phonebook entries as JSON
-- GET /api/persons/:id returns a single phonebook entry as JSON based on the id parameter in the request URL
-- POST /api/persons adds a new phonebook entry and returns the added entry as JSON
-- DELETE /api/persons/:id deletes a single phonebook entry based on the id parameter in the request URL and returns HTTP status code 204
-- GET /info returns information about the number of entries in the phonebook and the current date and time
-
-The application also defines a middleware function to log incoming HTTP requests and the response time using the [morgan](https://github.com/expressjs/morgan) middleware library.
-
-In addition, it uses the [cors](https://github.com/expressjs/cors) middleware library to allow cross-origin resource sharing, which enables the API to be accessed by client applications running on different domains, such as the frontend.
+The server performs various operations to interact with a MongoDB database. It utilizes the Mongoose ODM library to connect to the database and handle data interactions. In addition, it employs several middleware functions from Express.js to facilitate its functionality. The cors middleware enables cross-origin resource sharing by setting the Access-Control-Allow-Origin header, while the morgan middleware logs HTTP requests to the console. The server defines GET and POST HTTP methods to manipulate phonebook entries and provides two middleware functions to handle errors effectively. Additionally, it also defines a custom morgan token that logs the request body for POST requests.
