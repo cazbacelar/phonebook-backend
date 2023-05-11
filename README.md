@@ -1,6 +1,7 @@
 # Phonebook backend
-
 This is the backend part of the phonebook app project of the Full Stack Open course. The fullstack application was deployed using fly.io and it is available here: https://ancient-bird-6685.fly.dev/
+
+<img width="600" src="https://github.com/cazbacelar/fullstackopen/blob/main/part2/media/phonebook.gif">
 
 ## Table of contents
 - [Front-end - React application](https://github.com/cazbacelar/fullstackopen/tree/main/part2/phonebook)
